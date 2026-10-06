@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Kalvatar",
+    "slug": "kalvatar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "지도 상에서 친구들과 실시간 위치 및 이동 상태를 공유하기 위해 위치 권한이 필요합니다.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "루틴 진행 중 안전하고 부드러운 위치 공유를 위해 백그라운드 위치 권한이 필요합니다."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ]
+    }
+  }
+}

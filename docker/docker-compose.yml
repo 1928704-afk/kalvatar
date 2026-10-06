@@ -1,0 +1,76 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: kalvatar-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: kalvatar_db
+      MYSQL_USER: kalvatar_user
+      MYSQL_PASSWORD: kalvatar_password
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+09:00
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kalvatar-network
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: kalvatar-redis
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kalvatar-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: kalvatar-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: kalvatar_db
+      DB_USER: kalvatar_user
+      DB_PASSWORD: kalvatar_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kalvatar-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  kalvatar-network:
+    driver: bridge

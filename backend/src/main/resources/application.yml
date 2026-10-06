@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: kalvatar
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:kalvatar_db}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_USER:kalvatar_user}
+    password: ${DB_PASSWORD:kalvatar_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+jwt:
+  secret: c3VwZXItc2VjcmV0LWtleS1mb3Ita2FsdmF0YXItc2VydmljZS0yMDI2LWV4YW1wbGUtbXVzdC1iZS1hdC1sZWFzdC0yNTYtYml0cw==
+  access-token-validity-seconds: 7200 # 2 hours
+  refresh-token-validity-seconds: 1209600 # 14 days
+
+logging:
+  level:
+    com.kalvatar: DEBUG
+    org.springframework.security: INFO
