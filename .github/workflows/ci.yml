@@ -37,12 +37,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x backend/gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
 
       - name: Run Backend Tests with Gradle
         working-directory: ./backend
-        run: ./gradlew test
+        run: gradle test --no-daemon
 
   mobile-check:
     name: Mobile Typecheck
