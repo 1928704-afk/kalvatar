@@ -1,10 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { MapScreen } from '../screens/MapScreen';
 import { CalendarScreen } from '../screens/CalendarScreen';
 import { FriendsScreen } from '../screens/FriendsScreen';
 import { MyPageScreen } from '../screens/MyPageScreen';
+import { theme } from '../theme/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,15 +14,10 @@ export const RootNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4F46E5',
-        tabBarInactiveTintColor: '#9CA3AF',
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#E5E7EB',
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
-        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textMuted,
+        tabBarStyle: styles.floatingTabBar,
+        tabBarLabelStyle: styles.tabBarLabel,
       }}
     >
       <Tab.Screen
@@ -29,7 +25,11 @@ export const RootNavigator = () => {
         component={MapScreen}
         options={{
           tabBarLabel: '지도',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>🗺️</Text>,
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22, color: focused ? theme.colors.primary : theme.colors.textMuted }}>
+              🗺️
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -37,7 +37,11 @@ export const RootNavigator = () => {
         component={CalendarScreen}
         options={{
           tabBarLabel: '캘린더',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>📅</Text>,
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 20, color: focused ? theme.colors.primary : theme.colors.textMuted }}>
+              📅
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -45,17 +49,74 @@ export const RootNavigator = () => {
         component={FriendsScreen}
         options={{
           tabBarLabel: '친구',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>👥</Text>,
+          tabBarIcon: ({ focused }) => (
+            <View style={{ position: 'relative' }}>
+              <Text style={{ fontSize: 22, color: focused ? theme.colors.primary : theme.colors.textMuted }}>
+                👥
+              </Text>
+              <View style={styles.badgeCircle}>
+                <Text style={styles.badgeText}>3</Text>
+              </View>
+            </View>
+          ),
         }}
       />
       <Tab.Screen
         name="MyPage"
         component={MyPageScreen}
         options={{
-          tabBarLabel: 'MY',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>👤</Text>,
+          tabBarLabel: '마이',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22, color: focused ? theme.colors.primary : theme.colors.textMuted }}>
+              👤
+            </Text>
+          ),
         }}
       />
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  floatingTabBar: {
+    position: 'absolute',
+    bottom: 16,
+    left: 20,
+    right: 20,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.96)',
+    borderTopWidth: 0,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.14,
+    shadowRadius: 28,
+    elevation: 8,
+    paddingBottom: 8,
+    paddingTop: 8,
+  },
+  tabBarLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  badgeCircle: {
+    position: 'absolute',
+    top: -3,
+    right: -8,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
+    minWidth: 16,
+    height: 16,
+    paddingHorizontal: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#FFF',
+  },
+  badgeText: {
+    color: '#FFF',
+    fontSize: 9,
+    fontWeight: '800',
+  },
+});
